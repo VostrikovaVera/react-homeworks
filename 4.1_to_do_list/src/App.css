@@ -1,0 +1,36 @@
+.Card {
+  width: 300px;
+  margin: 25px auto 0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.Card-img {
+  width: 100%;
+}
+
+.Card-content {
+  padding: 20px;
+}
+
+.Card-title {
+  padding-bottom: 15px;
+  font-size: 20px;
+}
+
+.Card-text {
+  padding-bottom: 20px;
+}
+
+.Button {
+  display: inline-block;
+  padding: 10px 12px;
+  text-decoration: none;
+  color: #fff;
+  background-color: #2F7DF7;
+  border-radius: 3px;
+}
+
+.Button:hover {
+  background-color: #4c8bef;
+}
