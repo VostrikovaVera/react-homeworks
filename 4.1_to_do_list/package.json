@@ -5,6 +5,7 @@
   "homepage": "https://vostrikovavera.github.io/homework_2.2/build",
   "dependencies": {
     "axios": "^0.19.0",
+    "prop-types": "^15.7.2",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-scripts": "3.2.0"
@@ -29,5 +30,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "sass": "^1.23.3"
   }
 }

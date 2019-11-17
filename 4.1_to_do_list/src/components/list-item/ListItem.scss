@@ -1,0 +1,57 @@
+.ToDo {
+    &-item {
+        position: relative;
+        width: 100%;
+        padding: 12px 0;
+        list-style: none;
+        border-bottom: 1px solid #ccc;
+        cursor: pointer;
+
+        &.done {
+            text-decoration: line-through;
+        }
+
+        &:hover .ToDo-delete-item {
+            display: inline-block;
+        }
+
+        input {
+            font-size: 18px;
+            color: #676565;
+            outline: none;
+            border: 0;
+        }
+    }
+
+    &-delete-item {
+        display: none;
+        position: absolute;
+        right: 0;
+        width: 25px;
+        height: 25px;
+
+        &:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 3px;
+            height: 25px;
+            background-color: red;
+            transform: rotate(45deg) translateX(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 50%;
+            width: 3px;
+            height: 25px;
+            background-color: red;
+            transform: rotate(-45deg) translateX(50%);
+            transform-origin: 50% 50%;
+        }
+    }
+}

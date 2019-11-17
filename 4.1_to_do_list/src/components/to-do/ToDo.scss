@@ -8,8 +8,8 @@
     -moz-box-shadow: 2px 2px 3px 1px rgba(204, 204, 204, 1);
     box-shadow: 2px 2px 3px 1px rgba(204, 204, 204, 1);
     border-radius: 3px;
-}
 
-.ToDo-list {
-    padding: 0;
+    &-list {
+        padding: 0;
+    }
 }
