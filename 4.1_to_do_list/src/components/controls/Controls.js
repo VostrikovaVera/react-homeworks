@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './Controls.scss';
 
 const Controls = ({inputValue, onValueChange, onKeyDown, onAddItem}) => {
@@ -19,6 +20,13 @@ const Controls = ({inputValue, onValueChange, onKeyDown, onAddItem}) => {
             </button>
         </div>
     )
-}
+};
+
+Controls.propTypes = {
+    inputValue: PropTypes.string.isRequired,
+    onValueChange: PropTypes.func.isRequired,
+    onKeyDown: PropTypes.func.isRequired,
+    onAddItem: PropTypes.func.isRequired
+};
 
 export default Controls;

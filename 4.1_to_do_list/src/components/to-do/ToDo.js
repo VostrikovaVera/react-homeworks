@@ -3,6 +3,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { url as apiUrl } from '../../constants/Api';
 import './ToDo.scss';
+import Container from '../container/Container';
 import ListItem from '../list-item/ListItem';
 import Controls from '../controls/Controls';
 
@@ -15,15 +16,19 @@ export default class ToDo extends React.Component {
       list: []
     };
 
-    //this.changeItem = this.changeItem.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
+    this.addItem = this.addItem.bind(this);
+    this.changeItem = this.changeItem.bind(this);
+    this.deleteItem = this.deleteItem.bind(this);
   }
 
-  componentDidMount() {
-    axios.get(apiUrl)
-      .then(response => {
-        this.setState({ list: response.data });
-      })
-      .catch(e => console.log(e));
+  async componentDidMount() {
+    try {
+      const response = await axios.get(apiUrl);
+      this.setState({ list: response.data })
+    } catch(err) {
+      console.log(err);
+    }
   }
 
   handleChange = e => {
@@ -34,28 +39,30 @@ export default class ToDo extends React.Component {
     this.setState({ inputValue: '' });
   };
 
-  addItem = () => {
+  async addItem() {
     const { inputValue } = this.state;
 
     if (inputValue === '' || inputValue.length < 2) {
       alert('Please, enter at least 2 characters');
     } else {
-      axios.post(`${apiUrl}`, {
-        text: inputValue,
-        isDone: false
-      })
-        .then((response) => {
-          this.setState({
-            list: [
-              ...this.state.list,
-              {
-                text: inputValue,
-                isDone: false,
-                id: response.data.id
-              }
-            ]
-          });
+      try {
+        const response = await axios.post(`${apiUrl}`, {
+          text: inputValue,
+          isDone: false
         });
+        this.setState({
+          list: [
+            ...this.state.list,
+            {
+              text: inputValue,
+              isDone: false,
+              id: response.data.id
+            }
+          ]
+        })
+      } catch(err) {
+        console.log(err);
+      }
 
       this.clearInput();
     }
@@ -67,22 +74,7 @@ export default class ToDo extends React.Component {
     }
   };
 
-  changeItem = (paramName, paramNewValue, id) => {
-    /*axios.put(`${apiUrl}/${id}`, {
-      [paramName]: paramNewValue
-    }).then(() => {
-      this.setState({
-        list: this.state.list.map(item => {
-          return {
-            ...item,
-            [paramName]: item.id === id ? paramNewValue : item.paramName
-          };
-        })
-      });
-    });*/
-  };
-
-  /*async changeItem (paramName, paramNewValue, id) {
+  async changeItem (paramName, paramNewValue, id) {
     try {
       await axios.put(`${apiUrl}/${id}`, {
         [paramName]: paramNewValue
@@ -94,44 +86,47 @@ export default class ToDo extends React.Component {
             [paramName]: item.id === id ? paramNewValue : item.paramName
           };
         })
-      });
+      })
     } catch(err) {
       console.log(err);
     }
-  };*/
+  };
 
-  deleteItem = (e, id) => {
+  async deleteItem (e, id) {
     e.stopPropagation();
-    
-    axios.delete(`${apiUrl}/${id}`)
-      .then(() => {
-        this.setState({
-          list: this.state.list.filter((item) => {
-            return item.id !== id;
-          })
-        });
+
+    try {
+      await axios.delete(`${apiUrl}/${id}`);
+      this.setState({
+        list: this.state.list.filter((item) => {
+          return item.id !== id;
+        })
       })
+    } catch(err) {
+      console.log(err);
+    }
   };
 
   render() {
     const { inputValue, list } = this.state;
 
     return (
-      <div className="ToDo">
-        <h1>Todo App</h1>
-        <Controls inputValue={inputValue} onValueChange={this.handleChange} onKeyDown={this.onKeyDown} onAddItem={this.addItem}/>
-        <ul className="ToDo-list">
-          {list.map((item) => {
+      <Container>
+        <div className="ToDo">
+          <h1>Todo App</h1>
+          <Controls inputValue={inputValue} onValueChange={this.handleChange} onKeyDown={this.onKeyDown} onAddItem={this.addItem}/>
+          <ul className="ToDo-list">
+            {list.map((item) => {
               return <ListItem key={item.id} item={item} onChangeStatus={this.changeItem} onEditText={this.changeItem} onDelete={this.deleteItem} />;
-          })}
-        </ul>
-      </div>
+            })}
+          </ul>
+        </div>
+      </Container>
     );
   }
 }
 
 ToDo.propTypes = {
   inputValue: PropTypes.string,
-  list: PropTypes.array,
-  onValueChange: PropTypes.func
+  list: PropTypes.array
 };

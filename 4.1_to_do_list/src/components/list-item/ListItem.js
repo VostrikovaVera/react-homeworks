@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './ListItem.scss';
 
 export class ListItem extends React.Component {
@@ -47,5 +48,12 @@ export class ListItem extends React.Component {
         );
     }
 }
+
+ListItem.propTypes = {
+    item: PropTypes.object.isRequired,
+    onChangeStatus: PropTypes.func.isRequired,
+    onEditText: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired
+};
 
 export default ListItem;
