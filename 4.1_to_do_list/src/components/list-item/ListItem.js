@@ -19,23 +19,23 @@ export class ListItem extends React.Component {
 
     handleKeyDown = (e) => {
         if (e.keyCode === 13) {
-            this.props.onEditText('text', this.state.value, this.props.id);
+            this.props.onEditText({param: 'text', value: this.state.value, id: this.props.id});
         }
     };
 
     render() {
-        const { item, onChangeStatus, onEditText, onDelete } = this.props;
+        const { item, onChange, onEditText, onDelete } = this.props;
         const { id, isDone } = item;
 
         return (
         <li className={`ToDo-item ${isDone ? 'done' : ''}`}
-            onClick={() => { onChangeStatus('isDone', !isDone, id) }}
+            onClick={() => { onChange('isDone', !isDone, id) }}
         >
             <input
                 type="text"
                 value={this.state.value}
-                onChange={e => {this.handleChange(e)}}
-                onBlur={() => {onEditText('text', this.state.value, id)}}
+                onChange={this.handleChange}
+                onBlur={() => {onEditText({param: 'text', value: this.state.value, id})}}
                 onKeyDown={this.handleKeyDown}
             />
           <span
@@ -51,7 +51,7 @@ export class ListItem extends React.Component {
 
 ListItem.propTypes = {
     item: PropTypes.object.isRequired,
-    onChangeStatus: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
     onEditText: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired
 };

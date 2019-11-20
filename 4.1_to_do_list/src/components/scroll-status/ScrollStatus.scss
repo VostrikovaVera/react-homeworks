@@ -1,0 +1,12 @@
+.ScrollStatus {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  background: rgb(232, 232, 232);
+
+  .ScrollStatus-progress {
+    height: 5px;
+    background: rgb(134, 216, 20);
+  }
+}
