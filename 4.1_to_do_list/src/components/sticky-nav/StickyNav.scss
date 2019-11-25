@@ -3,4 +3,24 @@
     position: fixed;
     top: 0;
   }
+
+  ul {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  li {
+    list-style: none;
+  }
+
+  a {
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #e8e8e8;
+
+    &:hover {
+      color: #c7c7c7;
+    }
+  }
 }
