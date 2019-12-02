@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import './ToDo.scss';
 import Container from '../container/Container';
@@ -7,25 +7,11 @@ import ListItem from '../list-item/ListItem';
 import { getTasks, addTask, changeTask, deleteTask } from '../../actions/todo.actions';
 import {connect} from 'react-redux';
 
-const initialStore = {
-    list: [],
-    inputValue: ""
-};
-
-function reducer(state, action) {
-    switch (action.type) {
-        case "HANDLE_INPUT_CHANGE":
-            return {
-                ...state,
-                inputValue: action.payload
-            };
-        default:
-            throw new Error();
-    }
-}
+const initialinputValue = '';
 
 const ToDo = ({list, getTasks, addTask, changeTask, deleteTask}) => {
-    const [store, dispatch] = useReducer(reducer, initialStore);
+
+    const [inputValue, setInputValue] = useState(initialinputValue);
 
     const fetchData = () => {
        getTasks();
@@ -36,23 +22,15 @@ const ToDo = ({list, getTasks, addTask, changeTask, deleteTask}) => {
     }, []);
 
     const handleChange = e => {
-        dispatch({
-            type: 'HANDLE_INPUT_CHANGE',
-            payload: e.target.value
-        });
+        setInputValue(e.target.value);
     };
 
     const addItem = () => {
-        const {inputValue} = store;
-
         if (inputValue === '' || inputValue.length < 2) {
             alert('Please, enter at least 2 characters');
         } else {
             addTask(inputValue);
-            dispatch({
-                type: 'HANDLE_INPUT_CHANGE',
-                payload: ''
-            });
+            setInputValue('');
         }
     };
 
@@ -70,8 +48,6 @@ const ToDo = ({list, getTasks, addTask, changeTask, deleteTask}) => {
         e.stopPropagation();
         deleteTask(id);
     };
-
-    const {inputValue} = store;
 
     return (
         <Container>

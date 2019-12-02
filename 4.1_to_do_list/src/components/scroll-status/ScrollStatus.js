@@ -21,8 +21,6 @@ const ScrollStatus = () => {
     return <div className="ScrollStatus">
         <div className="ScrollStatus-progress" style={{ width: `${progress * 100}%` }}></div>
     </div>;
-
-
 };
 
 /*export class ScrollStatus extends React.Component {
