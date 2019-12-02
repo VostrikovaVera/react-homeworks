@@ -1,11 +1,11 @@
 import React, {useEffect, useReducer} from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
-import {url as apiUrl} from '../../constants/Api';
 import './ToDo.scss';
 import Container from '../container/Container';
 import Controls from '../controls/Controls';
 import ListItem from '../list-item/ListItem';
+import { getTasks, addTask, changeTask, deleteTask } from '../../actions/todo.actions';
+import {connect} from 'react-redux';
 
 const initialStore = {
     list: [],
@@ -14,58 +14,21 @@ const initialStore = {
 
 function reducer(state, action) {
     switch (action.type) {
-        case "GET_TASKS":
-            return {
-                ...state,
-                list: action.payload
-            };
-        case "ADD_ITEM":
-            return {
-                ...state,
-                list: [
-                    ...state.list,
-                    {
-                        text: action.payload.text,
-                        isDone: action.payload.isDone,
-                        id: action.payload.id
-                    }
-                ]
-            };
-        case "SET_INPUT_VALUE":
+        case "HANDLE_INPUT_CHANGE":
             return {
                 ...state,
                 inputValue: action.payload
             };
-        case "CHANGE_ITEM":
-            return {
-                ...state,
-                list: state.list.map(item => {
-                    return {
-                        ...item,
-                        [action.payload.param]: item.id === action.payload.id ? action.payload.value : item.param
-                    };
-                })
-            };
-        case "DELETE_ITEM":
-            return {
-                ...state,
-                list: state.list.filter((item) => {
-                    return item.id !== action.payload;
-                })
-            };
-
         default:
             throw new Error();
     }
 }
 
-const ToDo = () => {
+const ToDo = ({list, getTasks, addTask, changeTask, deleteTask}) => {
     const [store, dispatch] = useReducer(reducer, initialStore);
 
-    const fetchData = async() => {
-        const {data} = await axios.get(apiUrl);
-
-        dispatch({type: "GET_TASKS", payload: data});
+    const fetchData = () => {
+       getTasks();
     };
 
     useEffect(() => {
@@ -74,42 +37,22 @@ const ToDo = () => {
 
     const handleChange = e => {
         dispatch({
-            type: 'SET_INPUT_VALUE',
+            type: 'HANDLE_INPUT_CHANGE',
             payload: e.target.value
         });
     };
 
-    const clearInput = () => {
-        dispatch({
-            type: 'SET_INPUT_VALUE',
-            payload: ''
-        });
-    };
-
-    const addItem = async() => {
+    const addItem = () => {
         const {inputValue} = store;
 
         if (inputValue === '' || inputValue.length < 2) {
             alert('Please, enter at least 2 characters');
         } else {
-            try {
-                const response = await axios.post(`${apiUrl}`, {
-                    text: inputValue,
-                    isDone: false
-                });
-                dispatch({
-                    type: 'ADD_ITEM',
-                    payload: {
-                        text: inputValue,
-                        isDone: false,
-                        id: response.data.id
-                    }
-                })
-            } catch (err) {
-                console.log(err);
-            }
-
-            clearInput();
+            addTask(inputValue);
+            dispatch({
+                type: 'HANDLE_INPUT_CHANGE',
+                payload: ''
+            });
         }
     };
 
@@ -119,39 +62,16 @@ const ToDo = () => {
         }
     };
 
-    const changeItem = async({param, value, id}) => {
-        try {
-            await axios.put(`${apiUrl}/${id}`, {
-                [param]: value
-            });
-            dispatch({
-                type: 'CHANGE_ITEM',
-                payload: {
-                    param: param,
-                    value: value,
-                    id: id
-                }
-            })
-        } catch (err) {
-            console.log(err);
-        }
+    const changeItem = (newTask) => {
+        changeTask(newTask);
     };
 
-    const deleteItem = async(e, id) => {
+    const deleteItem = (e, id) => {
         e.stopPropagation();
-
-        try {
-            await axios.delete(`${apiUrl}/${id}`);
-            dispatch({
-                type: 'DELETE_ITEM',
-                payload: id
-            })
-        } catch (err) {
-            console.log(err);
-        }
+        deleteTask(id);
     };
 
-    const {inputValue, list} = store;
+    const {inputValue} = store;
 
     return (
         <Container>
@@ -175,4 +95,17 @@ ToDo.propTypes = {
     list: PropTypes.array
 };
 
-export default ToDo;
+const mapStateToProps = state => {
+    return {
+        list: state.todo.list
+    };
+};
+
+const mapDispatchToProps = {
+    getTasks,
+    addTask,
+    changeTask,
+    deleteTask
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ToDo);

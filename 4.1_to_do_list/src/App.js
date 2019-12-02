@@ -39,7 +39,7 @@ function App() {
             <div className="navigation">
               <ul>
                 <li>
-                  <Link to="/home">Home</Link>
+                  <Link to="/">Home</Link>
                 </li>
                 <li>
                   <Link to="/to-do">To-Do List</Link>
@@ -51,7 +51,13 @@ function App() {
             </div>
           </StickyNav>
           <Switch>
-            <Route path="/home">
+            <Route path="/scroll-page">
+              <ScrollPage />
+            </Route>
+            <Route path="/to-do">
+              <ToDo />
+            </Route>
+            <Route path="/">
               <div>
                 <p>Home page</p>
                 <p>Home page</p>
@@ -169,12 +175,6 @@ function App() {
                 <p>Home page</p>
                 <p>Home page</p>
               </div>
-            </Route>
-            <Route path="/to-do">
-              <ToDo />
-            </Route>
-            <Route path="/scroll-page">
-              <ScrollPage />
             </Route>
           </Switch>
         </Container>

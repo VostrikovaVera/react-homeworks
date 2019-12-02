@@ -3,7 +3,7 @@ import './StickyNav.scss';
 
 const StickyNav = ({children}) => {
     const navRef = useRef(null);
-    let isSetSticky = useRef(false)
+    let isSetSticky = useRef(false);
 
     const handleScroll = () => {
         const header = navRef.current;
